@@ -100,6 +100,12 @@ cd your_ros_ws
 rosdep install --from-paths src -r -y
 colcon build
 ```
+# Usage
+
+I recommend to run all the nodes at once using the launch file:
+``` bash
+ros2 launch alphabot2 alphabot2_launch.py
+```
 
 # About
 **Michele Rizzo**, *Master's Degree Computer Engineering student at University of Brescia*.
