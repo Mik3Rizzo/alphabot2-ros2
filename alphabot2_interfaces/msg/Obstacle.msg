@@ -1,0 +1,2 @@
+bool left_obstacle
+bool right_obstacle

@@ -1,0 +1,10 @@
+# DIRECTORIES
+
+# PyCharm config directories
+.idea/
+
+# ROS2 non source directories
+log/
+build/
+install/
+test/
