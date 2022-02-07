@@ -6,8 +6,6 @@ This repo contains **ROS2** packages for the Waveshare **Alphabot2-Pi** mobile r
 
 > Please, see [here](ros2-topology.md) for the ROS2 nodes topology and TODO.
 
-
-
 The code has been originally developed for the final project of the Robotics course, University of Brescia.
 
 
@@ -100,12 +98,22 @@ cd your_ros_ws
 rosdep install --from-paths src -r -y
 colcon build
 ```
-# Usage
+
+
+# Build and usage
+
+After you have all the requirements satisfied, clone this repo in ```your_ros_ws/src``` and build it:
+``` bash
+git clone https://github.com/Mik3Rizzo/alphabot2-ros2
+cd your_ros_ws
+colcon build
+```
 
 I recommend to run all the nodes at once using the launch file:
 ``` bash
 ros2 launch alphabot2 alphabot2_launch.py
 ```
+
 
 # About
 **Michele Rizzo**, *Master's Degree Computer Engineering student at University of Brescia*.
