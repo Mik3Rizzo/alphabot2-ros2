@@ -4,6 +4,9 @@ This repo contains **ROS2** packages for the Waveshare **Alphabot2-Pi** mobile r
 - **alphabot2**: it contains the nodes used to manage Alphabot2 sensors and actuators.
 - **alphabot2_interfaces**: it contains all the custom interfaces (ROS messages) designed for AlphaBot2.
 
+The current implementation includes nodes to manage the **motors**, the **IR obstacle sensors** and the **camera**. 
+There is also a node for **QR-code** detection.
+
 > Please, see [here](ros2-topology.md) for the ROS2 nodes topology and TODO.
 
 The code has been originally developed for the final project of the Robotics course, University of Brescia.
@@ -19,7 +22,7 @@ a Raspberry Pi4 (8 GB).
 
 ## Ubuntu and ROS2 setup
 
-Install Ubuntu Server 20.04 x64 on the Pi (see [here](https://ubuntu.com/download/raspberry-pi)).
+Install Ubuntu Server 20.04 x64 on the RPi4 (see [here](https://ubuntu.com/download/raspberry-pi)).
 
 Connect the RPi4 to WiFi and add auto-connection at boot (see [here](https://www.linuxbabe.com/ubuntu/connect-to-wi-fi-from-terminal-on-ubuntu-18-04-19-04-with-wpa-supplicant)).
 
@@ -59,7 +62,7 @@ source /opt/ros/foxy/setup.bash
 source /path_to_your_ros_ws/install/local_setup.bash
 ```
 
-Plug an additional external network adapter and setup it as a WiFi Access Point.
+Plug an additional external network adapter and setup it as a WiFi Access Point to easily SSH into the RPi4.
 Please follow [this guide](https://gist.github.com/ExtremeGTX/ea1d1c12dde8261b263ab2fead983dc8) and also these additional tricks:
 - put ```optional: true``` for wlan0 in 50-cloud-init.yaml to prevent endless booting time.
 - don't put ```After=network-online.target``` and ```Wants=network-online.target```
@@ -114,6 +117,15 @@ I recommend to run all the nodes at once using the launch file:
 ros2 launch alphabot2 alphabot2_launch.py
 ```
 
+To move the robot, publish a ```Twist``` ROS2 message on the ```alphabot2/cmd_vel``` topic. For example:
+``` bash
+ros2 topic pub --rate 1 alphabot2/cmd_vel geometry_msgs/msg/Twist "{linear: {x: 1.0, y: 0.0, z: 0.0}, angular: {x: 0.0, y: 0.0, z: 5.0}}"
+```
+
+This command publishes every second a linear velocity of ```1 m/s``` and an angular rate of ```5 rad/s```.
+> Please note that the maximum theoretical linear velocity is ```1.65 m/s``` while the angular rate is ```38.8 rad/s```.
+These quantities are estimated with the robot suspended from the floor and supplied with two Sony US14500VR Li-ion 3.7V 
+batteries at full charge. In these conditions the maximum wheel RPM is 750.
 
 # About
 **Michele Rizzo**, *Master's Degree Computer Engineering student at University of Brescia*.
