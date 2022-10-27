@@ -1,21 +1,20 @@
 # ROS2 for Waveshare Alphabot2-Pi
 
 This repo contains **ROS2** packages for the Waveshare **Alphabot2-Pi** mobile robot:
-- **alphabot2**: it contains the nodes used to manage Alphabot2 sensors and actuators.
-- **alphabot2_interfaces**: it contains all the custom interfaces (ROS messages) designed for AlphaBot2.
+- **alphabot2**: nodes used to manage Alphabot2 sensors and actuators.
+- **alphabot2_interfaces**: custom interfaces (ROS messages) designed for AlphaBot2.
 
 The current implementation includes nodes to manage the **motors**, the **IR obstacle sensors** and the **camera**. 
 There is also a node for **QR-code** detection.
 
 > Please, see [here](ros2-topology.md) for the ROS2 nodes topology and TODO.
 
-The code has been originally developed for the final project of the Robotics course, University of Brescia.
+The code has been originally developed for my final project of the Robotics course, University of Brescia.
 
 
 # Requirements
 
-- **Robot**: Waveshare Alphabot2-Pi mobile robot (see [here](https://www.waveshare.com/wiki/AlphaBot2-Pi)), equipped 
-a Raspberry Pi4 (8 GB).
+- **Robot**: Waveshare Alphabot2-Pi mobile robot (see [here](https://www.waveshare.com/wiki/AlphaBot2-Pi)), equipped with a Raspberry Pi4 (8 GB).
 
 - **OS**: Ubuntu Server 20.04 (Focal Fossa) x64.
 
@@ -55,7 +54,7 @@ sudo usermod -aG dialout ubuntu
 
 ### Suggestions
 
-Source the ROS2 core environment (underlay) and the ROS2 local workspaces (overlays) in the file ```.bashrc``` so that
+Source the ROS2 core environment (**underlay**) and the ROS2 local workspaces (**overlays**) in the file ```.bashrc``` so that
 they are automatically sourced in every bash shell:
 ``` bash
 source /opt/ros/foxy/setup.bash
@@ -80,14 +79,18 @@ sudo apt install v4l-utils
 echo bcm2835-v4l2 | sudo tee -a /etc/modules
 ```
 
-Add ```start_x=1``` in /boot/config.txt
+Add ```start_x=1``` in /boot/config.txt to enable the camera module.
 
 Clone the camera node and dependencies needed to compress images into the ```src``` folder of your ros workspace:
 ``` bash
 git clone -b foxy https://gitlab.com/boldhearts/ros2_v4l2_camera.git
+cd ros2_v4l2_camera ; git checkout 269573bd ; cd ..
 git clone -b ros2 https://github.com/ros-perception/vision_opencv.git
-git clone -b ros2 https://github.com/ros-perception/image_common.git                  
-git clone -b ros2 https://github.com/ros-perception/image_transport_plugins.git 
+cd vision_opencv ; git checkout 9ea89084 ; cd ..
+git clone -b ros2 https://github.com/ros-perception/image_common.git
+cd image_common ; git checkout 9729de81 ; cd ..             
+git clone -b ros2 https://github.com/ros-perception/image_transport_plugins.git
+cd image_transport_plugins ; git checkout 7ca90727 ; cd ..
 ```
 
 To fix building errors, modify ```camera_info_manager.cpp:46``` (in ```image_common/camera_info_manager/```) to:
@@ -101,6 +104,22 @@ cd your_ros_ws
 rosdep install --from-paths src -r -y
 colcon build
 ```
+
+### Troubleshooting
+
+If you get a build error like this:
+```
+Imported target "Boost::python" includes non-existent path
+   "/include"
+in its INTERFACE_INCLUDE_DIRECTORIES.
+```
+
+The Boost library may be installed in /usr/include and not in /include.
+You can fix the problem creating a symlink:
+```bash
+sudo ln -s /usr/include /include
+```
+If /usr/include is not your case, you should figure out where the Boost library is placed and create a symlink accordingly.
 
 
 # Build and usage
@@ -128,10 +147,9 @@ These quantities are estimated with the robot suspended from the floor and suppl
 batteries at full charge. In these conditions the maximum wheel RPM is 750.
 
 # About
+
 **Michele Rizzo**, *Master's Degree Computer Engineering student at University of Brescia*.
 - **Mail**: [m.rizzo006@studenti.unibs.it](mailto:m.rizzo006@studenti.unibs.it).
 - **Github**: [Mik3Rizzo](https://github.com/Mik3Rizzo/)
 
 Please, feel free to contact me for informations or problems.
-
-
